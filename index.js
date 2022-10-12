@@ -1,3 +1,3 @@
-module.exports = () => {
-  // ...
-};
+const {CLI} = require('./fileSystem')
+
+CLI()
