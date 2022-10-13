@@ -1,3 +1,3 @@
-const {CLI} = require('./fileSystem')
+const {CLI} = require('./cli')
 
 CLI()
