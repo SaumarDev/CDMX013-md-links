@@ -1,6 +1,8 @@
 const fs = require("fs");
+//const { readFileSync } = require("fs");
 const process = require("process");
-var path = require("path");
+const path = require("path");
+const markdownLinkExtractor = require("markdown-link-extractor");
 
 const CLI = () => {
   let pathToRead = process.argv[2];
@@ -15,20 +17,21 @@ const CLI = () => {
       pathToRead = pathResolved;
     }
     return pathToRead;
-  };
+  }; 
 
-  console.log(pathVerify(pathToRead));
+  //console.log(pathVerify(pathToRead));
 
-  //Verificar si es un folder:
-  fs.lstat(pathToRead, (err, stats) => {
+  //Verificar si es un folder, lee los archivos, verifica si es md y extrae los links
+ fs.lstat(pathToRead, (err, stats) => {
     if (stats.isDirectory()) {
       readFolder(pathToRead);
     }
     //Si la ruta es un archivo, solo debe verificar que su extensión sea .md
     if (stats.isFile() && path.extname(pathToRead) == ".md") {
-      readFile(pathToRead)
-    };
-  });
+      readFile(pathToRead);
+    }
+  }); 
+
 
 
   //Enlistando archivos de un folder y verificando que contenga archivos con extensión .md
@@ -36,17 +39,27 @@ const CLI = () => {
     fs.readdir(`${pathFolderToRead}`, (err, files) => {
       files.forEach((file) => {
         if (path.extname(file) == ".md") {
-          console.log(file);
+          readFile(file);
         }
       });
     });
   };
 
-  const readFile = (pathToRead) =>{
+  //Función para leer el archivo y extraer los links
+  const readFile = (pathToRead) => {
     fs.readFile(`${pathToRead}`, "utf8", (err, data) => {
-      console.log(data);
-  })
-}
+      getLinks(data)
+    });
+  };
+
+  const getLinks = (data) => {
+    const { links } = markdownLinkExtractor(data);
+    links.forEach((link) => console.log(link))
+  }
+/* 
+  const markdown = readFile(pathToRead)
+  const { links } = markdownLinkExtractor(markdown);
+  links.forEach((link) => console.log(link)); */
 
 };
 
