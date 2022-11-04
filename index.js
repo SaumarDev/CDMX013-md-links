@@ -1,3 +1,3 @@
-const {CLI} = require('./cli')
+const {mdLinks} = require('./mdLinks')
 
-CLI()
+mdLinks('./testFile.md');
