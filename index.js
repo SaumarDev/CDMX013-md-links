@@ -1,3 +1,3 @@
 const {mdLinks} = require('./mdLinks')
 
-mdLinks('./testFile.md');
+mdLinks('./testFile.md', {validate:true});
